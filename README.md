@@ -20,3 +20,21 @@
 
 ![image](https://github.com/user-attachments/assets/cb9d6f1f-ce6e-4f4a-83de-a5c8fd6fa95a)
 
+### №2. Настройка окружения
+Откройте файл .env и укажите следующие настройки приложения: ini APP_NAME=ToDoApp APP_ENV=local APP_KEY= APP_DEBUG=true APP_URL=http://localhost:8000
+
+![image](https://github.com/user-attachments/assets/a91e6962-0461-4409-8995-118d4f88a384)
+
+Сгенерируйте ключ приложения, который будет использоваться для шифрования данных: bash php artisan key:generate 
+
+![image](https://github.com/user-attachments/assets/60d0bf5d-016e-4786-8d3d-a161de77e55a)
+
+ Вопрос: Что будет, если данный ключ попадет в руки злоумышленника?
+
+ #### Это может привести к:
+* Доступу к зашифрованным данным (сессии, токены, данные в БД).
+* Подделке данных (манипуляция куками, сессиями).
+* Нарушению аутентификации пользователей.
+
+
+
