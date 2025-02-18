@@ -123,37 +123,88 @@ tasks.show — отображение отдельной задачи.
 * Создайте представления для задач со следующими шаблонами в каталоге resources/views/tasks:
 ### index.blade.php:
 
-@extends('layouts.app')
-
-@section('title', 'Список задач')
-
-@section('content')
-    <h1>Список задач</h1>
-
-    @foreach ($tasks as $task)
-        <div>
-            <h3>{{ $task['title'] }}</h3>
-            <p>Статус: {{ $task['status'] }}</p>
-            <a href="{{ route('tasks.show', $task['id']) }}">Посмотреть задачу</a>
-        </div>
-    @endforeach
-@endsection
+![image](https://github.com/user-attachments/assets/a31f2d06-c917-4642-9a91-5ea11ce4253f)
 
 ### show.blade.php:
 
-@extends('layouts.app')
-@section('title', 'Задача: {{ $task["title"] }}')
-@section('content')
-    <h1>{{ $task['title'] }}</h1>
-    <p>Описание: {{ $task['description'] }}</p>
-    <p>Статус: {{ $task['status'] }}</p>
-    <p>Дата создания: {{ $task['created_at'] }}</p>
-    <p>Дата обновления: {{ $task['updated_at'] }}</p>
-    <p>Приоритет: {{ $task['priority'] }}</p>
-    <p>Исполнитель: {{ $task['assigned_to'] }}</p>
-@endsection
-@extends('layouts.app')
-@section('title', 'Задача: {{ $task["title"] }}')
-@section('content')
-    <x-task :task="$task"></x-task>
-@endsection
+![image](https://github.com/user-attachments/assets/93b67ebb-eac1-4924-a346-6e0defd4f022)
+
+
+* Отрендерите список задач на странице index.blade.php с использованием статических данных, передаваемых из контроллера с помощью директивы @foreach.
+![image](https://github.com/user-attachments/assets/fbbbcbee-4857-4c82-9772-e70184ab8c1d)
+
+### №4.3. Анонимные компоненты Blade
+ * Создайте анонимный компонент для отображения header. Используйте созданный компонент в макете layouts/app.blade.php.
+
+   ![image](https://github.com/user-attachments/assets/0110bb3b-c9e3-48f9-b9bd-c83b115da8fb)
+
+* Создайте анонимный компонент для отображения задачи
+### app.blade.php:
+
+```
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title')</title> <!-- Здесь будет вставляться заголовок страницы -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> <!-- Подключаем стили -->
+</head>
+<body>
+    <!-- Используем компонент header -->
+    <x-header>{{ $title ?? 'To-Do App' }}</x-header> <!-- Заголовок страницы -->
+
+    <!-- Меню навигации -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url('/') }}">Главная</a></li>
+                <li><a href="{{ url('/about') }}">О нас</a></li>
+                <li><a href="{{ route('tasks.index') }}">Список задач</a></li>
+                <li><a href="{{ route('tasks.create') }}">Создать задачу</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Основной контент страницы -->
+    <main>
+        @yield('content') <!-- Здесь будет вставляться контент каждой страницы -->
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <p>&copy; 2025 To-Do App. Все права защищены , я лично защищала.</p>
+    </footer>
+</body>
+</html>
+```
+## Конечный результат 
+
+![image](https://github.com/user-attachments/assets/038c62ed-4841-4fcc-925d-6690b6d9211d)
+
+![image](https://github.com/user-attachments/assets/394e37cf-44fd-4f66-86dc-4e1748999f96)
+
+![image](https://github.com/user-attachments/assets/e4833db7-cfbc-4a86-a3a6-4a56f817b3b9)
+
+![image](https://github.com/user-attachments/assets/d9974323-fd5b-4277-b2c2-c0920a508682)
+
+# Контрольные вопросы
+
+#### Что такое ресурсный контроллер в Laravel и какие маршруты он создает?
+* Ресурсный контроллер в Laravel — это контроллер, который автоматически создает стандартные методы для работы с CRUD-операциями (создание, чтение, обновление и удаление) для заданного ресурса. Ресурсный контроллер создает маршруты для следующих операций:
+* index (GET) — отображение списка ресурсов.
+* create (GET) — форма для создания нового ресурса.
+* store (POST) — сохранение нового ресурса.
+* show (GET) — отображение одного ресурса.
+* edit (GET) — форма для редактирования ресурса.
+* update (PUT/PATCH) — обновление ресурса.
+* destroy (DELETE) — удаление ресурса.
+#### Объясните разницу между ручным созданием маршрутов и использованием ресурсного контроллера.
+* Ручное создание маршрутов подразумевает, что каждый маршрут нужно прописывать и связывать с конкретным методом контроллера. В случае с ресурсным контроллером, Laravel автоматически генерирует все необходимые маршруты для стандартных операций CRUD, упрощая работу разработчика и уменьшив количество кода.
+#### Какие преимущества предоставляет использование анонимных компонентов Blade?
+* Анонимные компоненты Blade позволяют создавать повторно используемые блоки кода, что помогает сократить дублирование. Это облегчает организацию кода и упрощает поддержку, так как компоненты можно легко внедрять и менять без необходимости изменять несколько файлов.
+#### Какие методы HTTP-запросов используются для выполнения операций CRUD?
+* Создание: POST
+* Чтение: GET
+* Обновление: PUT или PATCH
+* Удаление: DELETE
