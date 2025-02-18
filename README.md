@@ -104,6 +104,56 @@ tasks.show — отображение отдельной задачи.
 
 ![image](https://github.com/user-attachments/assets/3257c49f-7302-41a6-8d16-523b32c284cf)
 
+## №4. Шаблонизация с использованием Blade
+### 4.1. Создание макета страницы
+*Создайте макет основных страниц layouts/app.blade.php с общими элементами страницы:
+Используйте директиву @yield для определения области, в которую будут вставляться содержимое различных страниц.
 
+![image](https://github.com/user-attachments/assets/f05b2590-0328-4312-83f2-a88919c399cd)
 
+### №4.2. Использование шаблонов Blade
+* Создайте представление для главной страницы home.blade.php с использованием макета layouts/app.blade.php в каталоге resources/views.
 
+![image](https://github.com/user-attachments/assets/23b175d8-4f34-4d5d-98aa-874d3f8e63ad)
+
+* Создайте представление для страницы "О нас" — about.blade.php с использованием макета layouts/app.blade.php в каталоге resources/views.
+
+  ![image](https://github.com/user-attachments/assets/4ebd7198-9315-4cd6-bea4-e9209a950ec1)
+
+* Создайте представления для задач со следующими шаблонами в каталоге resources/views/tasks:
+### index.blade.php:
+
+@extends('layouts.app')
+
+@section('title', 'Список задач')
+
+@section('content')
+    <h1>Список задач</h1>
+
+    @foreach ($tasks as $task)
+        <div>
+            <h3>{{ $task['title'] }}</h3>
+            <p>Статус: {{ $task['status'] }}</p>
+            <a href="{{ route('tasks.show', $task['id']) }}">Посмотреть задачу</a>
+        </div>
+    @endforeach
+@endsection
+
+### show.blade.php:
+
+@extends('layouts.app')
+@section('title', 'Задача: {{ $task["title"] }}')
+@section('content')
+    <h1>{{ $task['title'] }}</h1>
+    <p>Описание: {{ $task['description'] }}</p>
+    <p>Статус: {{ $task['status'] }}</p>
+    <p>Дата создания: {{ $task['created_at'] }}</p>
+    <p>Дата обновления: {{ $task['updated_at'] }}</p>
+    <p>Приоритет: {{ $task['priority'] }}</p>
+    <p>Исполнитель: {{ $task['assigned_to'] }}</p>
+@endsection
+@extends('layouts.app')
+@section('title', 'Задача: {{ $task["title"] }}')
+@section('content')
+    <x-task :task="$task"></x-task>
+@endsection
